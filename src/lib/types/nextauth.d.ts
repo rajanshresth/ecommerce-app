@@ -1,4 +1,4 @@
-import { UserType } from "@prisma/client"
+import { type UserType } from "@prisma/client"
 import NextAuth from "next-auth"
 
 

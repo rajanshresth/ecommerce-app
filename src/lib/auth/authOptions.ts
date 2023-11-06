@@ -4,8 +4,6 @@ import GoogleProvider from "next-auth/providers/google";
 import prisma from "../../server/db/client";
 import { NextAuthOptions } from "next-auth";
 import { Adapter } from "next-auth/adapters";
-import { UserType } from "@prisma/client";
-
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -43,7 +41,7 @@ export const authOptions: NextAuthOptions = {
         where: {email: session.user.email }
       })
       if(token){
-        session.user.userRole=dbUser?.userType as UserType;
+        session.user.userRole=dbUser?.userType!;
       }
       return session
     }
