@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BiUserCircle } from 'react-icons/bi';
 
-export default function Component() {
+export default function NavBar() {
     return (
-        <div className='flex h-16 items-center justify-between space-x-8 bg-white p-4 shadow-md'>
+        <div className='flex h-16 items-center justify-between space-x-8 bg-white p-4 '>
             <div className='flex w-3/4 items-center gap-8'>
                 <Link href='/' className='gap- flex'>
                     <svg
