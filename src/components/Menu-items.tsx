@@ -32,7 +32,7 @@ export function MenuItems() {
                     <NavigationMenuContent>
                         <ul className='grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
                             <li className='row-span-3'>
-                                <NavigationMenuLink>
+                                <NavigationMenuLink asChild>
                                     <Link
                                         className='bg-sport flex h-full w-full select-none flex-col justify-end overflow-hidden rounded-md no-underline outline-none focus:shadow-md'
                                         href='/'
@@ -49,17 +49,19 @@ export function MenuItems() {
                                     </Link>
                                 </NavigationMenuLink>
                             </li>
-                            <MenuLinks />
+                            <li>
+                                <MenuLinks />
+                            </li>
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <Button>
-                        <Link href='/seller' passHref>
-                            <NavigationMenuLink>For Seller</NavigationMenuLink>
-                        </Link>
-                    </Button>
-                </NavigationMenuItem>
+                <Button>
+                    <Link href='/sellers' passHref>
+                        <div className='text-sm font-medium leading-none'>
+                            For Sellers
+                        </div>
+                    </Link>
+                </Button>
             </NavigationMenuList>
         </NavigationMenu>
     );

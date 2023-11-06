@@ -4,6 +4,16 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BiUserCircle } from 'react-icons/bi';
+import { useSession } from 'next-auth/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function NavBar() {
     return (
@@ -58,13 +68,9 @@ export default function NavBar() {
                     />
                 </form>
             </div>
-            <div className='flex justify-end gap-4 '>
-                <Button size='icon' variant='ghost'>
-                    <Link href={'/dashboard'}>
-                        <BiUserCircle className=' h-6 w-6 text-gray-800 dark:text-gray-200' />
-                    </Link>
-                </Button>
-                <Button size='icon' variant='ghost'>
+            <div className='flex items-center justify-end gap-4 pr-4'>
+                <AuthStatus />
+                <Button size='icon' variant='ghost' asChild>
                     <Link href={'/cart'}>
                         <svg
                             className=' h-6 w-6 text-gray-800 dark:text-gray-200'
@@ -89,3 +95,42 @@ export default function NavBar() {
         </div>
     );
 }
+
+export const AuthStatus = () => {
+    const { status, data: session } = useSession();
+    if (status === 'unauthenticated')
+        return (
+            <Link href='/api/auth/signin'>
+                <BiUserCircle size={30} />
+            </Link>
+        );
+    return (
+        <div className='pr-6'>
+            {status === 'authenticated' && (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Avatar>
+                            <AvatarImage
+                                src={session.user.image}
+                                className='h-9 w-9 rounded-full'
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>
+                            <p>{session.user.email}</p>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <Link href='/dashboard'>Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href='/api/auth/signout'>Signout</Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+        </div>
+    );
+};
