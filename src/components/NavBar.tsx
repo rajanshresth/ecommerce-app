@@ -60,7 +60,7 @@ export default function NavBar() {
             </div>
             <div className='flex justify-end gap-4 '>
                 <Button size='icon' variant='ghost'>
-                    <Link href={'/user'}>
+                    <Link href={'/dashboard'}>
                         <BiUserCircle className=' h-6 w-6 text-gray-800 dark:text-gray-200' />
                     </Link>
                 </Button>
