@@ -4,25 +4,18 @@ import Link from 'next/link';
 export default async function Home() {
   
   return (
-    <div className='flex flex-col space-y-4 '>
+    <div className='flex space-x-4 '>
       <Button>
-        <Link href="/api/auth/signin">
-          Sign-In
+        <Link href='/'>Home</Link>
+      </Button>
+      <Button>
+        <Link href='/dashboard'>
+          Dashboard
         </Link>
       </Button>
       <Button>
-        <Link href="/api/auth/signout">
-          Sign-Out
-        </Link>
-      </Button>
-      <Button>
-        <Link href="/admin-dashboard">
-          Admin Dashboard
-        </Link>
-      </Button>
-      <Button>
-        <Link href="/user-dashboard">
-          User Dashboard
+        <Link href='/api/auth/signout'>
+          Logout
         </Link>
       </Button>
     </div>
