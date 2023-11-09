@@ -15,7 +15,10 @@ const ProductView = async () => {
                     className='group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl'
                     key={product.id}
                 >
-                    <Link className='absolute inset-0 z-10' href='#'>
+                    <Link
+                        className='absolute inset-0 z-10'
+                        href={`product/${product.id}`}
+                    >
                         <span className='sr-only'>View Product</span>
                     </Link>
                     <Image
