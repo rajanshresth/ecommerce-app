@@ -36,13 +36,13 @@ const AddProductForm = () => {
         defaultValues: {
             name: '',
             description: '',
-            image: '',
             price: 0,
             quantity: 0,
         },
     });
 
     const onSubmit = async (data: AddProductType) => {
+        console.log(data);
         try {
             setIsSubmitting(true);
             await axios.post('/api/product', data);
@@ -53,7 +53,7 @@ const AddProductForm = () => {
             setError('An error occured while adding product');
         }
     };
-    console.log(onSubmit);
+    const image = form.watch('image');
 
     return (
         <div className='mx-auto w-full max-w-screen-sm'>
@@ -117,10 +117,12 @@ const AddProductForm = () => {
                             </FormItem>
                         )}
                     />
-                    <ImageUpload
-                        onChange={(value) => form.setValue('image', value)}
-                        value={form.getValues('image')}
-                    />
+                    <div>
+                        <ImageUpload
+                            onChange={(value) => form.setValue('image', value)}
+                            value={image}
+                        />
+                    </div>
                     <div className='mb-2'>
                         <FormField
                             control={form.control}
@@ -169,7 +171,7 @@ const AddProductForm = () => {
                                             <SelectItem value='TShirt'>
                                                 TShirt
                                             </SelectItem>
-                                            <SelectItem value='Hoodies'>
+                                            <SelectItem value='Hoodie'>
                                                 Hoodies
                                             </SelectItem>
                                             <SelectItem value='Sweetshirt'>

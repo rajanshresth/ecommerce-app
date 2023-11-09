@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    const { name, description, price, image, sizes, quantity, category } = body;
+
     const validation = ProductSchema.safeParse(body);
     if (!validation.success) {
         return NextResponse.json(validation.error.format(), { status: 400 });
@@ -18,13 +20,13 @@ export async function POST(request: NextRequest) {
 
     const newProduct = await prisma.product.create({
         data: {
-            name: body.name,
-            description: body.description,
-            price: body.price,
-            image: body.image,
-            sizes: body.size,
-            quantity: body.quantity,
-            category: body.category,
+            name,
+            description,
+            price,
+            image,
+            sizes,
+            quantity,
+            category,
         },
     });
     return NextResponse.json(newProduct, { status: 201 });
