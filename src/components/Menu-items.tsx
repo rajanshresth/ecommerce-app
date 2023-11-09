@@ -19,7 +19,7 @@ export function MenuItems() {
         <NavigationMenu className='px-4'>
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <Link href='/products' legacyBehavior passHref>
+                    <Link href='/product' legacyBehavior passHref>
                         <NavigationMenuLink
                             className={navigationMenuTriggerStyle()}
                         >
@@ -56,9 +56,9 @@ export function MenuItems() {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
                 <Button>
-                    <Link href='/sellers' passHref>
+                    <Link href='/seller' passHref>
                         <div className='text-sm font-medium leading-none'>
-                            For Sellers
+                            For Seller
                         </div>
                     </Link>
                 </Button>

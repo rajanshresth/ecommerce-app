@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback } from 'react';
 import { CldUploadWidget } from 'next-cloudinary';
-import { Button } from '../ui/button';
+import { Button } from '../../../../components/ui/button';
 import Image from 'next/image';
 
 interface ImageUploadProps {

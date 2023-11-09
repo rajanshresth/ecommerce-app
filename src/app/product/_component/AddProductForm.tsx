@@ -21,7 +21,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { ProductSchema } from '@/lib/validation/Product_schema';
-import ImageUpload from '../upload/uploadproduct';
+import ImageUpload from './upload/uploadimage';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';

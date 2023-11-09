@@ -1,1 +1,1 @@
-export { default } from '@/components/product/AddProductForm';
+export { default } from '@/app/product/_component/AddProductForm';
