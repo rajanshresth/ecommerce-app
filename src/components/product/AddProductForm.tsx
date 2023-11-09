@@ -21,10 +21,16 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { ProductSchema } from '@/lib/validation/Product_schema';
-
+import ImageUpload from '../upload/uploadproduct';
+import { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 type AddProductType = z.infer<typeof ProductSchema>;
 
 const AddProductForm = () => {
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
     const form = useForm<AddProductType>({
         resolver: zodResolver(ProductSchema),
         defaultValues: {
@@ -36,14 +42,22 @@ const AddProductForm = () => {
         },
     });
 
-    const onSubmit = (data: AddProductType) => {
-        console.log(data.price); // Log the data type
-        data.price = Number(data.price);
-        console.log(data); // Log the modified data
+    const onSubmit = async (data: AddProductType) => {
+        try {
+            setIsSubmitting(true);
+            await axios.post('/api/product', data);
+            router.push('/dashboard');
+            router.refresh();
+        } catch (error) {
+            setIsSubmitting(false);
+            setError('An error occured while adding product');
+        }
     };
+    console.log(onSubmit);
 
     return (
         <div className='mx-auto w-full max-w-screen-sm'>
+            {error && <p className='text-red-500'>{error}</p>}
             <h1 className='mb-6 text-center text-3xl font-bold'>
                 Product Information
             </h1>
@@ -102,6 +116,10 @@ const AddProductForm = () => {
                                 <FormMessage />
                             </FormItem>
                         )}
+                    />
+                    <ImageUpload
+                        onChange={(value) => form.setValue('image', value)}
+                        value={form.getValues('image')}
                     />
                     <div className='mb-2'>
                         <FormField
@@ -198,7 +216,11 @@ const AddProductForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type='submit' className='mt-2'>
+                    <Button
+                        type='submit'
+                        className='mt-2'
+                        disabled={isSubmitting}
+                    >
                         Submit
                     </Button>
                 </form>
