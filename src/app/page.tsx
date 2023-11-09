@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import ProductView from './product/Product';
 import Link from 'next/link';
+import AboutPage from './about/page';
 
 export default async function Home() {
     return (
@@ -22,6 +23,9 @@ export default async function Home() {
                 </Link>
             </section>
             <ProductView />
+            <section>
+                <AboutPage />
+            </section>
         </div>
     );
 }

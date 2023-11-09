@@ -6,11 +6,8 @@ import prisma from '@/server/db/client';
 
 const ProductView = async () => {
     const dbProduct = await prisma.product.findMany({
-        take: 4,
+        take: 12,
     });
-    // const product= await prisma.product.
-
-    console.log(dbProduct);
     return (
         <section className='mt-8 grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {dbProduct?.map((product) => (
