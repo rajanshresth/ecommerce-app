@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import Image from 'next/image';
 import prisma from '@/server/db/client';
+import CartButton from '../cart/_component/add-to-cart';
+import { Product } from '../cart/page';
 
 export default async function Component() {
     const dbProduct = await prisma.product.findMany();
@@ -83,6 +85,7 @@ export default async function Component() {
                             </h3>
                             <h4 className='font-semibold'>${product.price}</h4>
                         </div>
+                        <CartButton product={product as Product} />
                     </div>
                 ))}
             </main>

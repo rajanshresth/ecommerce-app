@@ -1,8 +1,11 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import prisma from '@/server/db/client';
+import ProductCart from './_component/product-cart';
+import { CartProvider } from '@/context/CartContext';
+import CartButton from '../cart/_component/add-to-cart';
+import { Product } from '../cart/page';
 
 const ProductView = async () => {
     const dbProduct = await prisma.product.findMany({
@@ -32,43 +35,9 @@ const ProductView = async () => {
                         }}
                         width='400'
                     />
-                    <div className='bg-white p-4 dark:bg-zinc-950'>
-                        <h3 className='text-lg font-semibold md:text-xl'>
-                            {product?.name}
-                        </h3>
-                        <p className='text-sm text-zinc-500 dark:text-zinc-400'>
-                            ${product?.price}
-                        </p>
-                        <Button>Add to Cart</Button>
-                    </div>
+                    <CartButton product={product as Product} />
                 </div>
             ))}
-
-            {/* <div className='group relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl'>
-                <Link className='absolute inset-0 z-10' href='#'>
-                    <span className='sr-only'>View Product</span>
-                </Link>
-                <Image
-                    alt='Product 1'
-                    className='h-60 w-full object-cover'
-                    height='400'
-                    src={`${dbProduct?.image}`}
-                    style={{
-                        aspectRatio: '400/400',
-                        objectFit: 'cover',
-                    }}
-                    width='400'
-                />
-                <div className='bg-white p-4 dark:bg-zinc-950'>
-                    <h3 className='text-lg font-semibold md:text-xl'>
-                        {dbProduct?.name}
-                    </h3>
-                    <p className='text-sm text-zinc-500 dark:text-zinc-400'>
-                        ${dbProduct?.price}
-                    </p>
-                    <Button>Add to Cart</Button>
-                </div>
-            </div> */}
         </section>
     );
 };
