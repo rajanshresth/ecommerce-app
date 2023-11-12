@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useCart } from '../../../hook/useCart';
 import { usePathname } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
 
 interface Props {
     product: {
@@ -15,22 +15,15 @@ interface Props {
     };
 }
 
-const CartButton = ({ product }: Props) => {
+const CartButton = ({ ...product }: Props) => {
     const currentPathname = usePathname();
     console.log('currentPathname:', currentPathname);
-    const { cart, addToCart, removeFromCart } = useCart();
-    console.log('cart:', cart);
-    //get product id
-    const productId = product.id;
-
-    //function to add to cart
+    const { addToCart, removeFromCart } = useCart();
     const handleAddToCart = () => {
-        addToCart(productId, 1);
+        addToCart(product.product.id, 1);
     };
-
-    //function to remove from cart
     const handleRemoveFromCart = () => {
-        removeFromCart(productId);
+        removeFromCart(product.product.id);
     };
 
     return (
@@ -39,9 +32,12 @@ const CartButton = ({ product }: Props) => {
                 <Button onClick={handleAddToCart}>Add to Cart</Button>
 
                 {currentPathname === '/cart' && (
-                    <Button onClick={handleRemoveFromCart}>
-                        Remove from Cart
-                    </Button>
+                    <>
+                        <p>Name: {product.product.name}</p>
+                        <Button onClick={handleRemoveFromCart}>
+                            Remove from Cart
+                        </Button>
+                    </>
                 )}
             </div>
         </div>

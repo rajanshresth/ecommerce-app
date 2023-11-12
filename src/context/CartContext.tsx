@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 export interface CartItem {
     productId: string;
@@ -15,9 +15,13 @@ interface CartContextProps {
     removeFromCart: (productId: string) => void;
 }
 
-export const CartContext = createContext<CartContextProps | ''>('');
+export const CartContext = createContext<CartContextProps | undefined>(
+    undefined
+);
 
-export function useCart() {
+export const CartProvider: React.FC<PropsWithChildren> = ({
+    children,
+}: PropsWithChildren) => {
     const [cart, setCart] = useState<Cart>(
         localStorage.getItem('cartItems')
             ? JSON.parse(localStorage.getItem('cartItems') || 'null')
@@ -62,6 +66,25 @@ export function useCart() {
         // Update the cart state.
         setCart({ ...cart });
     };
+    return (
+        <CartContext.Provider
+            value={{
+                cart,
+                addToCart,
+                removeFromCart,
+            }}
+        >
+            {children}
+        </CartContext.Provider>
+    );
+};
 
-    return { cart, addToCart, removeFromCart };
+export function useCart() {
+    const context = useContext(CartContext);
+
+    if (!context) {
+        throw new Error('useCart must be used within a CartProvider');
+    }
+
+    return context;
 }
