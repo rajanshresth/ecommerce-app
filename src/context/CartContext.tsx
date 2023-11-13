@@ -22,11 +22,7 @@ export const CartContext = createContext<CartContextProps | undefined>(
 export const CartProvider: React.FC<PropsWithChildren> = ({
     children,
 }: PropsWithChildren) => {
-    const [cart, setCart] = useState<Cart>(
-        localStorage.getItem('cartItems')
-            ? JSON.parse(localStorage.getItem('cartItems') || 'null')
-            : []
-    );
+    const [cart, setCart] = useState<Cart>({ items: [] });
     console.log('cart-hook', cart);
 
     const addToCart = (productId: string, quantity: number) => {
@@ -42,6 +38,7 @@ export const CartProvider: React.FC<PropsWithChildren> = ({
             // If the cart item does not exist, create a new one and add it to the cart.
             cart.items.push({ productId, quantity });
         }
+        console.log('Quantity', cartItem?.quantity);
 
         // Update the cart state.
         setCart({ ...cart });

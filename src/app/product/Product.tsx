@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import prisma from '@/server/db/client';
-import { Button } from '@/components/ui/button';
+import CartButton from '../cart/_component/add-to-cart';
 
 const ProductView = async () => {
     const dbProduct = await prisma.product.findMany({
@@ -39,7 +39,12 @@ const ProductView = async () => {
                         </div>
                     </Link>
 
-                    <Button className='mb-4 ml-4'>Add to cart</Button>
+                    <CartButton
+                        product={{
+                            productId: product.id || '',
+                            quantity: 1,
+                        }}
+                    />
                 </div>
             ))}
         </section>

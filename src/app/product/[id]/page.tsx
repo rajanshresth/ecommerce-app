@@ -10,7 +10,6 @@ import {
 import Image from 'next/image';
 import prisma from '@/server/db/client';
 import CartButton from '@/app/cart/_component/add-to-cart';
-import { Product } from '@/app/cart/page';
 
 const ProductDetailPage = async ({ params }: { params: { id: string } }) => {
     const dbProduct = await prisma.product.findUnique({
@@ -66,7 +65,12 @@ const ProductDetailPage = async ({ params }: { params: { id: string } }) => {
                     <p className='text-sm'>{dbProduct?.description}</p>
                 </div>
                 <div className='mt-4'>
-                    <CartButton product={dbProduct as Product} />
+                    <CartButton
+                        product={{
+                            productId: dbProduct?.id || '',
+                            quantity: 1,
+                        }}
+                    />
                 </div>
             </div>
         </div>

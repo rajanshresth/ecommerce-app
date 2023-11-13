@@ -21,9 +21,10 @@ model Product {
   price       Int
   category    Category
   orderItems  OrderItem[]
+  cartItems   CartItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime?
-  deleted     Boolean     @default(false) 
+  deleted     Boolean     @default(false)
 }
 
 enum size {
@@ -50,6 +51,17 @@ enum Status {
   Processing
   Failed
   Paid
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  size      Decimal
+
+  @@index([productId])
 }
 
 model OrderItem {
@@ -111,16 +123,17 @@ enum UserType {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime   @default(now())
   orders        Order[]
-  userType      UserType  @default(User)
+  cartItems     CartItem[]
+  userType      UserType   @default(User)
 }
 
 model VerificationToken {
