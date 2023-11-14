@@ -21,7 +21,6 @@ model Product {
   price       Int
   category    Category
   orderItems  OrderItem[]
-  cartItems   CartItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime?
   deleted     Boolean     @default(false)
@@ -46,47 +45,47 @@ enum Category {
 }
 
 enum Status {
-  Created
-  NotPaid
+  Pending
   Processing
-  Failed
   Paid
 }
 
-model CartItem {
-  id        String  @id @default(cuid())
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  size      Decimal
-
-  @@index([productId])
-}
-
 model OrderItem {
-  id        String  @id @default(cuid())
-  product   Product @relation(fields: [productId], references: [id])
+  id        String    @id @default(cuid())
+  quantity  Int
+  product   Product   @relation(fields: [productId], references: [id])
   productId String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String
-  size      Decimal
-
-  @@index([productId])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  order     Order?    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String?
 }
 
 model Order {
-  id                        String      @id @default(cuid())
-  user                      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                    String
-  status                    Status      @default(Created)
-  orderItems                OrderItem[]
-  createdAt                 DateTime    @default(now())
-  updatedAt                 DateTime?
-  stripePaymentIntentId     String?     @unique
-  stripePaymentClientSecret String?
+  id         String      @id @default(cuid())
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  total      Int
+  status     Status      @default(Pending)
+  orderItems OrderItem[]
+  payment    Payment?    @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?
+  paymentId  String?
+}
 
-  @@index([userId])
+model Payment {
+  id                        String    @id @default(cuid())
+  amount                    Int
+  currency                  String
+  status                    Status    @default(Pending)
+  method                    String
+  order                     Order[]
+  orderId                   String?
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime?
+  stripePaymentIntentId     String?
+  stripePaymentClientSecret String?
 }
 
 // Next-Auth
@@ -123,17 +122,16 @@ enum UserType {
 }
 
 model User {
-  id            String     @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?    @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime  @default(now())
   orders        Order[]
-  cartItems     CartItem[]
-  userType      UserType   @default(User)
+  userType      UserType  @default(User)
 }
 
 model VerificationToken {

@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/table';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '@/components/ui/button';
+import axios from 'axios';
+// import { useRouter } from 'next/navigation';
 
 export interface Product {
     id: string;
@@ -23,11 +25,10 @@ export interface Product {
     quantity: number;
 }
 
-// ... (existing imports)
-
 const CartPage = () => {
     const { cart, addToCart, removeFromCart } = useCart();
     const [dbProducts, setDbProducts] = useState<Product[]>([]);
+    // const router = useRouter();
 
     useEffect(() => {
         // Fetch product information for each item in the cart
@@ -58,10 +59,21 @@ const CartPage = () => {
     const calculateTotalPrice = () => {
         return dbProducts.reduce(
             (total, dbProduct, index) =>
-                total + (dbProduct?.price || 0) * cart.items[index].quantity,
+                total + (dbProduct?.price || 0) * cart.items[index]?.quantity,
             0
         );
     };
+
+    // Function to handle checkout
+    const handleCheckout = async () => {
+        const data = cart.items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+        }));
+        await axios.post('/api/cart', data);
+    };
+
+    // Function to handle payment
 
     if (cart.items.length === 0) {
         return (
@@ -100,7 +112,9 @@ const CartPage = () => {
                             </TableHeader>
                             <TableBody>
                                 {dbProducts.map((dbProduct, index) => (
-                                    <TableRow key={cart.items[index].productId}>
+                                    <TableRow
+                                        key={cart.items[index]?.productId}
+                                    >
                                         <TableCell>
                                             {dbProduct && (
                                                 <Image
@@ -129,7 +143,9 @@ const CartPage = () => {
                                                     <AiOutlinePlus />
                                                 </button>
                                                 <p className='text-lg font-semibold'>
-                                                    {cart.items[index].quantity}
+                                                    {cart &&
+                                                        cart.items[index]
+                                                            ?.quantity}
                                                 </p>
                                                 <button
                                                     onClick={() =>
@@ -146,7 +162,7 @@ const CartPage = () => {
                                         <TableCell>
                                             {dbProduct &&
                                                 dbProduct?.price *
-                                                    cart.items[index].quantity}
+                                                    cart.items[index]?.quantity}
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -157,7 +173,10 @@ const CartPage = () => {
                             <h1 className='text-2xl font-bold'>
                                 Total: ${calculateTotalPrice()}
                             </h1>
-                            <Button className='rounded-md bg-gray-900 px-4 py-2 text-white'>
+                            <Button
+                                className='rounded-md bg-gray-900 px-4 py-2 text-white'
+                                onClick={handleCheckout}
+                            >
                                 Checkout
                             </Button>
                         </div>

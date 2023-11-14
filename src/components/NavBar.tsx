@@ -14,6 +14,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import CartQuantity from '@/app/cart/_component/ui/cart-quantity';
 
 export default function NavBar() {
     return (
@@ -68,29 +69,29 @@ export default function NavBar() {
                     />
                 </form>
             </div>
-            <div className='flex items-center justify-end gap-4 pr-4'>
+            <div className='flex items-center justify-end  gap-4 pr-4'>
                 <AuthStatus />
-                <Button size='icon' variant='ghost' asChild>
-                    <Link href={'/cart'}>
+                <Link href={'/cart'} className='relatve'>
+                    <Button className='relative' variant='ghost'>
                         <svg
-                            className=' h-6 w-6 text-gray-800 dark:text-gray-200'
+                            className=' m-auto h-6 w-6'
                             fill='none'
-                            height='24'
+                            height='20'
                             stroke='currentColor'
                             strokeLinecap='round'
                             strokeLinejoin='round'
                             strokeWidth='2'
                             viewBox='0 0 24 24'
-                            width='24'
+                            width='20'
                             xmlns='http://www.w3.org/2000/svg'
                         >
                             <circle cx='8' cy='21' r='1' />
                             <circle cx='19' cy='21' r='1' />
                             <path d='M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12' />
                         </svg>
-                        <span className='sr-only'>Shopping Cart</span>
-                    </Link>
-                </Button>
+                        <CartQuantity />
+                    </Button>
+                </Link>
             </div>
         </div>
     );

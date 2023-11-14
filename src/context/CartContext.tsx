@@ -23,7 +23,6 @@ export const CartProvider: React.FC<PropsWithChildren> = ({
     children,
 }: PropsWithChildren) => {
     const [cart, setCart] = useState<Cart>({ items: [] });
-    console.log('cart-hook', cart);
 
     const addToCart = (productId: string, quantity: number) => {
         // Find the cart item with the given product Id.
