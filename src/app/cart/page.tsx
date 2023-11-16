@@ -175,7 +175,7 @@ const CartPage = () => {
                             </h1>
                             <Button
                                 className='rounded-md bg-gray-900 px-4 py-2 text-white'
-                                onClick={handleCheckout}
+                                onClick={() => handleCheckout}
                             >
                                 Checkout
                             </Button>

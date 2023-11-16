@@ -1,4 +1,3 @@
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -7,8 +6,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2023-10-16',
 });
 export default async function handler(req: NextRequest) {
-    const session = getServerSession();
-    if (!session) return null;
     if (req.method === 'POST') {
         try {
             // Create Checkout Sessions from body params.
@@ -24,7 +21,6 @@ export default async function handler(req: NextRequest) {
                 success_url: `${req.headers}/?success=true`,
                 cancel_url: `${req.headers}/?canceled=true`,
             });
-            // NextResponse.redirect(session.url || '');
             NextResponse.redirect(session.url || '', {
                 status: 303,
             }).json();
