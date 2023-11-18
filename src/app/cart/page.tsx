@@ -70,7 +70,7 @@ const CartPage = () => {
             productId: item.productId,
             quantity: item.quantity,
         }));
-        await axios.post('/api/cart', data);
+        await axios.post('/api/order', data);
     };
 
     // Function to handle payment
