@@ -4,14 +4,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
-    const { orderItem } = body;
 
-    if (!orderItem) {
-        return null;
-    }
+    const { order } = body;
 
-    const createdOrderItems: OrderItem = await prisma.orderItem.create({
-        data: orderItem,
+    // if (!order) return null;
+    const createOrderItem = await prisma.orderItem.create({
+        data: order,
     });
-    return NextResponse.json(createdOrderItems, { status: 201 });
+    return NextResponse.json(createOrderItem, { status: 201 });
 }
