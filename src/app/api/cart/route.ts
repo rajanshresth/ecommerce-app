@@ -2,14 +2,15 @@ import prisma from '@/server/db/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: NextResponse) {
-    const orderItems = await request.json();
+    const body = await request.json();
+    const { orderItem } = body;
 
-    if (!orderItems) {
+    if (!orderItem) {
         return null;
     }
 
     const createdOrderItems = await prisma.orderItem.create({
-        data: orderItems,
+        data: orderItem,
     });
 
     return NextResponse.json(createdOrderItems, { status: 201 });
