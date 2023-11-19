@@ -41,8 +41,9 @@ const ProductView = async () => {
 
                     <CartButton
                         product={{
-                            productId: product.id || '',
+                            productId: product?.id,
                             quantity: 1,
+                            price: product.price,
                         }}
                     />
                 </div>

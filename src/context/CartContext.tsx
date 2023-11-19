@@ -1,9 +1,18 @@
 'use client';
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import prisma from '@/server/db/client';
+import {
+    PropsWithChildren,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
+import { set } from 'zod';
 
 export interface CartItem {
     productId: string;
     quantity: number;
+    price: number;
 }
 
 export interface Cart {
@@ -24,23 +33,44 @@ export const CartProvider: React.FC<PropsWithChildren> = ({
 }: PropsWithChildren) => {
     const [cart, setCart] = useState<Cart>({ items: [] });
 
-    const addToCart = (productId: string, quantity: number) => {
+    useEffect(() => {
+        const fetchCart = async () => {
+            try {
+                const dbProduct = await fetch('/api/product')
+                    .then((res) => res.json())
+                    .then((data) => data);
+                setCart({ items: dbProduct });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchCart();
+    }, [cart.items]);
+    console.log('cart', cart);
+
+    const addToCart = (productId: string) => {
         // Find the cart item with the given product Id.
         const cartItem = cart.items.find(
             (item) => item.productId === productId
         );
+        const quantity = 1;
 
-        //If the cart item exists, increase its quantiy.
+        // If the cart item exists, increase its quantity and calculate price.
         if (cartItem) {
             cartItem.quantity += quantity;
+            cartItem.price = quantity * cartItem.price;
         } else {
             // If the cart item does not exist, create a new one and add it to the cart.
-            cart.items.push({ productId, quantity });
+            const productPrice = cartItem!.price;
+            cart.items.push({
+                productId,
+                quantity,
+                price: Number(quantity * productPrice),
+            });
         }
-        console.log('Quantity', cartItem?.quantity);
 
         // Update the cart state.
-        setCart({ ...cart });
+        // setCart({ ...cart });
     };
 
     const removeFromCart = (productId: string) => {

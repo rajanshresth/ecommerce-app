@@ -69,6 +69,7 @@ const ProductDetailPage = async ({ params }: { params: { id: string } }) => {
                         product={{
                             productId: dbProduct?.id || '',
                             quantity: 1,
+                            price: Number(dbProduct?.price),
                         }}
                     />
                 </div>

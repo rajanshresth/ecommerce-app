@@ -32,6 +32,7 @@ const Product = async () => {
                         product={{
                             productId: dbProduct.id,
                             quantity: 1,
+                            price: dbProduct.price,
                         }}
                     />
                 </div>

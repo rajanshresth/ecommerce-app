@@ -14,7 +14,6 @@ import {
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
-// import { useRouter } from 'next/navigation';
 
 export interface Product {
     id: string;
@@ -28,7 +27,7 @@ export interface Product {
 const CartPage = () => {
     const { cart, addToCart, removeFromCart } = useCart();
     const [dbProducts, setDbProducts] = useState<Product[]>([]);
-    // const router = useRouter();
+    console.log('cart', cart);
 
     useEffect(() => {
         // Fetch product information for each item in the cart
