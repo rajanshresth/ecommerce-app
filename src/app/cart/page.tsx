@@ -14,6 +14,7 @@ import {
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export interface Product {
     id: string;
@@ -25,9 +26,9 @@ export interface Product {
 }
 
 const CartPage = () => {
+    const router = useRouter();
     const { cart, addToCart, removeFromCart } = useCart();
     const [dbProducts, setDbProducts] = useState<Product[]>([]);
-    console.log('cart', cart);
 
     useEffect(() => {
         // Fetch product information for each item in the cart
@@ -46,8 +47,8 @@ const CartPage = () => {
         fetchProductDetails();
     }, [cart]);
 
-    const handleAddToCart = (productId: string) => {
-        addToCart(productId, 1);
+    const handleAddToCart = (productId: string, price: number) => {
+        addToCart(productId, 1, price);
     };
 
     const handleRemoveFromCart = (productId: string) => {
@@ -56,23 +57,27 @@ const CartPage = () => {
 
     // Function to calculate the total price
     const calculateTotalPrice = () => {
-        return dbProducts.reduce(
-            (total, dbProduct, index) =>
-                total + (dbProduct?.price || 0) * cart.items[index]?.quantity,
-            0
-        );
+        return cart.items.reduce((acc, item) => {
+            return acc + item.quantity * item.price;
+        }, 0);
     };
 
     // Function to handle checkout
     const handleCheckout = async () => {
         const data = cart.items.map((item) => ({
             productId: item.productId,
-            quantity: item.quantity,
+            quantity: Number(item.quantity),
+            price: Number(item.price),
         }));
-        await axios.post('/api/order', data);
+        data.map(async (data) => {
+            try {
+                await axios.post('/api/order', data);
+                await axios.post('/api/checkout_sessions', data);
+            } catch (error) {
+                console.error('Checkout Error:', error);
+            }
+        });
     };
-
-    // Function to handle payment
 
     if (cart.items.length === 0) {
         return (
@@ -135,7 +140,8 @@ const CartPage = () => {
                                                     onClick={() =>
                                                         handleAddToCart(
                                                             cart.items[index]
-                                                                .productId
+                                                                .productId,
+                                                            dbProduct.price
                                                         )
                                                     }
                                                 >
@@ -174,7 +180,7 @@ const CartPage = () => {
                             </h1>
                             <Button
                                 className='rounded-md bg-gray-900 px-4 py-2 text-white'
-                                onClick={() => handleCheckout}
+                                onClick={() => handleCheckout()}
                             >
                                 Checkout
                             </Button>

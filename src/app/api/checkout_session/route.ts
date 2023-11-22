@@ -10,31 +10,47 @@ const stripe = new Stripe(key, {
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
-
-    const dbOrder = await prisma.order.findUnique({
+    const dbOrderItems = await prisma.orderItem.findUnique({
         where: {
             id: body.id,
         },
     });
 
-    if (body.length > 0) {
+    if (dbOrderItems) {
         try {
+            const price = dbOrderItems.price;
+            const quantity = dbOrderItems.quantity;
+
+            if (price === undefined || quantity === undefined) {
+                return NextResponse.json(
+                    { error: 'Invalid order item data' },
+                    { status: 400 }
+                );
+            }
+
             // Create Checkout Sessions from body params.
             const session = await stripe.checkout.sessions.create({
                 line_items: [
                     {
                         // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                        price: `${dbOrder?.total}`,
-                        quantity: 1,
+                        price: `${price}`,
+                        quantity: Number(`${quantity}`),
                     },
                 ],
                 mode: 'payment',
                 success_url: `${request.headers.get('origin')}/?success=true`,
                 cancel_url: `${request.headers.get('origin')}/?canceled=true`,
             });
+            console.log('session-stripe', session);
+
             return NextResponse.json({ session }, { status: 200 });
         } catch (err) {
             return NextResponse.json(err, { status: 500 });
         }
+    } else {
+        return NextResponse.json(
+            { error: 'Order item not found' },
+            { status: 404 }
+        );
     }
 }

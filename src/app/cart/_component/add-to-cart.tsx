@@ -13,7 +13,7 @@ const CartButton = ({ product }: Props) => {
     const currentPathname = usePathname();
     const { addToCart, removeFromCart } = useCart();
     const handleAddToCart = () => {
-        addToCart(product.productId, 1);
+        addToCart(product.productId, product.quantity, product.price);
     };
     const handleRemoveFromCart = () => {
         removeFromCart(product.productId);

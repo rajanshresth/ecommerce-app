@@ -42,7 +42,6 @@ const AddProductForm = () => {
     });
 
     const onSubmit = async (data: AddProductType) => {
-        console.log(data);
         try {
             setIsSubmitting(true);
             await axios.post('/api/product', data);
