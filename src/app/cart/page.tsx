@@ -12,9 +12,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
-import { Button } from '@/components/ui/button';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import CheckoutButton from './_component/ui/checkout';
 
 export interface Product {
     id: string;
@@ -26,7 +25,6 @@ export interface Product {
 }
 
 const CartPage = () => {
-    const router = useRouter();
     const { cart, addToCart, removeFromCart } = useCart();
     const [dbProducts, setDbProducts] = useState<Product[]>([]);
 
@@ -71,8 +69,7 @@ const CartPage = () => {
         }));
         data.map(async (data) => {
             try {
-                await axios.post('/api/order', data);
-                await axios.post('/api/checkout_sessions', data);
+                await axios.post('/api/checkout_session', data);
             } catch (error) {
                 console.error('Checkout Error:', error);
             }
@@ -178,12 +175,7 @@ const CartPage = () => {
                             <h1 className='text-2xl font-bold'>
                                 Total: ${calculateTotalPrice()}
                             </h1>
-                            <Button
-                                className='rounded-md bg-gray-900 px-4 py-2 text-white'
-                                onClick={() => handleCheckout()}
-                            >
-                                Checkout
-                            </Button>
+                            <CheckoutButton />
                         </div>
                     </div>
                 </div>
