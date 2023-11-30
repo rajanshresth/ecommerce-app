@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
 }
 
 // Product
@@ -36,12 +36,7 @@ enum size {
 enum Category {
   TShirt
   Hoodie
-  Sweatshirt
-  Pants
-  Shorts
-  Hat
   Shoes
-  Socks
 }
 
 enum Status {
