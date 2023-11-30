@@ -4,8 +4,12 @@ import React from 'react';
 import prisma from '@/server/db/client';
 import CartButton from '@/app/cart/_component/add-to-cart';
 
-const Product = async () => {
-    const dbProducts = await prisma.product.findMany();
+const Products = async () => {
+    const dbProducts = await prisma.product.findMany({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
 
     return (
         <main className='grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
@@ -41,4 +45,4 @@ const Product = async () => {
     );
 };
 
-export default Product;
+export default Products;
