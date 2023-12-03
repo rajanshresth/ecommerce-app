@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import CartQuantity from '@/app/cart/_component/ui/cart-quantity';
+import SearchInput from './Search-Input';
 
 export default function NavBar() {
     return (
@@ -46,28 +47,7 @@ export default function NavBar() {
                     </div>
                     <span className='sr-only'>Fashion Store</span>
                 </Link>
-                <form className='relative w-full'>
-                    <svg
-                        className=' absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-500'
-                        fill='none'
-                        height='24'
-                        stroke='currentColor'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='2'
-                        viewBox='0 0 24 24'
-                        width='24'
-                        xmlns='http://www.w3.org/2000/svg'
-                    >
-                        <circle cx='11' cy='11' r='8' />
-                        <path d='m21 21-4.3-4.3' />
-                    </svg>
-                    <Input
-                        className='rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400'
-                        placeholder='Search fashion items...'
-                        type='search'
-                    />
-                </form>
+                <SearchInput />
             </div>
             <div className='flex items-center justify-end  gap-4 pr-4'>
                 <AuthStatus />
