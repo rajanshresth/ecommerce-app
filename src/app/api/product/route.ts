@@ -34,6 +34,10 @@ export async function POST(request: NextRequest) {
 
 
 export async function GET(request: NextRequest) {
-    const dbProduct = await prisma.product.findMany();
-    return NextResponse.json(dbProduct);
+    const dbProducts = await prisma.product.findMany({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+    return NextResponse.json(dbProducts);
 }

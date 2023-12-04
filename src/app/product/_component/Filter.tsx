@@ -8,39 +8,19 @@ import {
 } from '@/components/ui/accordion';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { useRouter, useSearchParams } from 'next/navigation';
-
-const updateQueryParams = (
-    router: any,
-    searchParams: URLSearchParams,
-    updates: Record<string, string | undefined>
-) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    for (const [key, value] of Object.entries(updates)) {
-        if (value) {
-            params.set(key, value);
-        } else {
-            params.delete(key);
-        }
-    }
-
-    const query = params.toString() ? `?${params.toString()}` : '';
-    router.push(`/product${query}`);
-};
+import { useRouter } from 'next/navigation';
 
 const FilterProduct = () => {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    console.log('Router', router);
-    console.log('SearchParams', searchParams);
 
-    const handleCategoryChange = (category: string) => {
-        updateQueryParams(router, searchParams, { category });
+    const handlePriceChange = (value: string) => {
+        const uncodedValue = encodeURI(value);
+        router.push(`/product?q=${uncodedValue}`);
     };
-
-    const handlePriceChange = (priceRange: string) => {
-        updateQueryParams(router, searchParams, { priceRange });
+    const handleCategoryChange = (value: string) => {
+        const uncodedValue = encodeURI(value);
+        console.log(uncodedValue);
+        router.push(`/product?q=${uncodedValue}`);
     };
 
     return (
@@ -57,7 +37,7 @@ const FilterProduct = () => {
                                 <Checkbox
                                     id='category-1'
                                     value='Shoes'
-                                    onChange={() =>
+                                    onClick={() =>
                                         handleCategoryChange('Shoes')
                                     }
                                 />
@@ -67,7 +47,7 @@ const FilterProduct = () => {
                                 <Checkbox
                                     id='category-2'
                                     value='Hoodies'
-                                    onChange={() =>
+                                    onClick={() =>
                                         handleCategoryChange('Hoodies')
                                     }
                                 />
@@ -85,14 +65,14 @@ const FilterProduct = () => {
                             <Label className='flex items-center gap-2 font-normal'>
                                 <Checkbox
                                     id='price-1'
-                                    onChange={() => handlePriceChange('$0-$50')}
+                                    onClick={() => handlePriceChange('$0-$50')}
                                 />
                                 $0 - $50
                             </Label>
                             <Label className='flex items-center gap-2 font-normal'>
                                 <Checkbox
                                     id='price-2'
-                                    onChange={() =>
+                                    onClick={() =>
                                         handlePriceChange('$51-$100')
                                     }
                                 />

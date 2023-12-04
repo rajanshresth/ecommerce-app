@@ -1,27 +1,28 @@
 import prisma from '@/server/db/client';
+import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+
+interface Params {
+    category?: Prisma.EnumCategoryFilter;
+    price?: number;
+}
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { name: string } }
+    { params }: { params: Params }
 ) {
     try {
         const searchData = await prisma.product.findMany({
             where: {
-                OR: [
-                    {
-                        name: {
-                            contains: params.name,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
+                ...(params.category && { category: params.category }),
+                ...(params.price && { price: params.price }),
             },
         });
+        console.log('searchData', searchData);
         return NextResponse.json(searchData, { status: 200 });
     } catch (error) {
         return NextResponse.json(error, {
-            status: 404,
+            status: 500,
         });
     }
 }
