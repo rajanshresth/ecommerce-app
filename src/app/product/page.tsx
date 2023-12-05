@@ -13,7 +13,7 @@ interface Props {
 
 interface Category {}
 
-export default function Component({ searchParams }: Props) {
+export default function Component() {
     return (
         <section className='container mx-auto grid items-start gap-6 px-4 py-6 md:grid-cols-[1fr_3fr] md:px-6'>
             <FilterProduct />

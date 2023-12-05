@@ -1,15 +1,35 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import React from 'react';
-import prisma from '@/server/db/client';
+import React, { useEffect } from 'react';
 import CartButton from '@/app/cart/_component/add-to-cart';
+import { Product } from '@/app/search/page';
+import { useSearchParams } from 'next/navigation';
 
-const Products = async () => {
-    const dbProducts = await prisma.product.findMany({
-        orderBy: {
-            createdAt: 'desc',
-        },
-    });
+const Products = () => {
+    const paramsQuery = useSearchParams();
+    const filterQuery = paramsQuery.get('q');
+    const [dbProducts, setDbProducts] = React.useState<Product[]>([]);
+    console.log(filterQuery);
+    useEffect(() => {
+        try {
+            const getDbProducts = async () => {
+                if (filterQuery) {
+                    const res = await fetch(`/api/filter?q=${filterQuery}`);
+                    const data = await res.json();
+                    setDbProducts(data);
+                } else {
+                    const res = await fetch(`/api/product`);
+                    const data = await res.json();
+                    setDbProducts(data);
+                }
+            };
+            getDbProducts();
+        } catch (error) {
+            console.log(`Error: ${error}`);
+        }
+    }, [filterQuery]);
+    console.log(`dbProducts:`, dbProducts);
 
     return (
         <main className='grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
